@@ -32,7 +32,7 @@
     .btn.secondary{background:#fff; color:var(--ink); border-color:var(--border)}
     pre, textarea.output{width:100%; background:#0b1020; color:#eaf2ff; border-radius:12px; border:1px solid #0d1530; padding:14px; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size:13px; line-height:1.6; overflow:auto}
     textarea.output{min-height:220px; resize:vertical}
-    .pill{display:inline-flex; align-items:center; gap:8px; padding:8px 10px; border-radius:999px; border:1px solid var(--border); background:#fff; font-size:13px}
+    .savecheck{display:inline-flex;align-items:center;gap:8px;font-size:13px;color:var(--muted);margin-top:8px}
     .footer{padding:16px 24px; border-top:1px solid var(--border); display:flex; justify-content:space-between; align-items:center; color:var(--muted); font-size:13px}
     .error{color:#fff; background:#b00020; border-color:#8d001a}
   </style>
@@ -53,21 +53,25 @@
       <form id="console" class="grid" style="padding:24px" autocomplete="off">
         <!-- API Config -->
         <fieldset class="grid col-12" style="border:0; padding:0; margin:0 0 8px">
-          <div class="row">
-            <span class="pill">Method <select id="method" class="control" style="width:auto; padding:6px 10px"><option>POST</option><option>GET</option></select></span>
-            <span class="pill">Save settings <input type="checkbox" id="save"/></span>
-          </div>
-          <div class="grid" style="margin-top:12px">
-            <div class="field col-12">
+          <div class="grid top-grid">
+            <div class="field col-3">
+              <label for="method">Method</label>
+              <select id="method" class="control">
+                <option>POST</option>
+                <option>GET</option>
+              </select>
+              <label class="savecheck"><input type="checkbox" id="save"/> Save settings</label>
+            </div>
+            <div class="field col-9">
               <label for="url">API URL</label>
               <input class="control" id="url" name="url" type="url" placeholder="https://api.example.com/v1/chat/completions" required />
               <div class="small">Your Databricks/endpoint URL. Must allow browser requests (CORS).</div>
             </div>
-            <div class="field col-8">
+            <div class="field col-6">
               <label for="apiKey">API key (Bearer)</label>
               <input class="control" id="apiKey" name="apiKey" type="password" placeholder="sk-..." />
             </div>
-            <div class="field col-4">
+            <div class="field col-6">
               <label for="model">Model</label>
               <input class="control" id="model" name="model" list="modelOptions" placeholder="gemma3:4b" />
               <datalist id="modelOptions">
@@ -80,6 +84,7 @@
             </div>
           </div>
         </fieldset>
+
 
         <!-- Prompt Area -->
         <div class="grid col-12">
