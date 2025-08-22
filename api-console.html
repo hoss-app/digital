@@ -3,38 +3,39 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>AI API Test Console · CareVicinity AU</title>
+  <title>AI API Test Console · CareVicinity AU (Wide)</title>
   <style>
-    :root{
-      --brand:#1b5e20; --brand-ink:#0d3311; --accent:#2e7d32; --bg:#f7faf7; --card:#ffffff; --ink:#1f2937; --muted:#6b7280; --border:#e5e7eb; --error:#b00020;
-    }
+    :root{ --brand:#1b5e20; --brand-ink:#0d3311; --accent:#2e7d32; --bg:#f7faf7; --card:#ffffff; --ink:#1f2937; --muted:#6b7280; --border:#e5e7eb; --error:#b00020 }
     *,*::before,*::after{box-sizing:border-box}
     html,body{height:100%}
-    body{margin:0; font-family: system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Noto Sans"; background:var(--bg); color:var(--ink)}
-    .wrap{min-height:100%; display:grid; place-items:center; padding:24px}
-    .card{width:100%; max-width:1000px; background:var(--card); border:1px solid var(--border); border-radius:20px; box-shadow:0 20px 40px rgba(0,0,0,.06); overflow:hidden}
-    .header{display:flex; align-items:center; gap:16px; padding:20px 24px; background:linear-gradient(180deg, #f1f8f1, #ffffff); border-bottom:1px solid var(--border)}
+    body{margin:0; font-family: system-ui,-apple-system,Segoe UI,Roboto,Helvetica Neue,Arial,Noto Sans; background:var(--bg); color:var(--ink)}
+    .wrap{min-height:100%; display:grid; place-items:start center; padding:16px}
+    .card{width:clamp(1024px, 98vw, 1440px); background:var(--card); border:1px solid var(--border); border-radius:20px; box-shadow:0 20px 40px rgba(0,0,0,.06); overflow:hidden}
+    .header{display:flex; align-items:center; gap:16px; padding:20px 28px; background:linear-gradient(180deg,#f1f8f1,#fff); border-bottom:1px solid var(--border)}
     .brand{display:flex; align-items:center; gap:14px}
-    .brand img{height:44px; width:auto; border-radius:8px}
-    .brand h1{font-size:18px; margin:0; color:var(--brand-ink)}
+    .brand img{height:48px; width:auto; border-radius:8px}
+    .brand h1{font-size:20px; margin:0; color:var(--brand-ink)}
     .brand p{margin:2px 0 0; font-size:13px; color:var(--muted)}
+
+    .shell{padding:24px 28px}
     .grid{display:grid; gap:16px}
-    @media (min-width:880px){.grid{grid-template-columns:repeat(12,1fr)} .col-6{grid-column:span 6} .col-4{grid-column:span 4} .col-8{grid-column:span 8} .col-12{grid-column:span 12}}
+    @media (min-width:1024px){ .grid{grid-template-columns:repeat(12,1fr)} .col-3{grid-column:span 3} .col-4{grid-column:span 4} .col-5{grid-column:span 5} .col-6{grid-column:span 6} .col-7{grid-column:span 7} .col-8{grid-column:span 8} .col-9{grid-column:span 9} .col-12{grid-column:span 12} }
+
     label{display:block; font-weight:600; font-size:14px; margin:4px 0 8px}
     .field{position:relative}
-    .control{width:100%; padding:12px 14px; border:1px solid var(--border); border-radius:12px; background:#fff; font-size:15px; line-height:1.4; color:var(--ink); transition:border-color .15s ease, box-shadow .15s ease}
+    .control{width:100%; padding:14px 16px; border:1px solid var(--border); border-radius:12px; background:#fff; font-size:15px; line-height:1.4; color:var(--ink); transition:border-color .15s ease, box-shadow .15s ease}
     .control:focus{outline:none; border-color:var(--accent); box-shadow:0 0 0 4px rgba(46,125,50,.15)}
     .small{font-size:12px; color:var(--muted); margin-top:6px}
-    .row{display:flex; gap:12px; flex-wrap:wrap}
-    .actions{display:flex; gap:12px; justify-content:space-between; margin-top:12px}
+
+    .row-actions{display:flex; gap:12px; justify-content:space-between; margin-top:12px}
     .right{display:flex; gap:12px}
     .btn{appearance:none; border:1px solid transparent; background:var(--accent); color:#fff; padding:12px 18px; border-radius:12px; font-weight:700; cursor:pointer}
     .btn.secondary{background:#fff; color:var(--ink); border-color:var(--border)}
-    pre, textarea.output{width:100%; background:#0b1020; color:#eaf2ff; border-radius:12px; border:1px solid #0d1530; padding:14px; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size:13px; line-height:1.6; overflow:auto}
-    textarea.output{min-height:220px; resize:vertical}
-    .savecheck{display:inline-flex;align-items:center;gap:8px;font-size:13px;color:var(--muted);margin-top:8px}
-    .footer{padding:16px 24px; border-top:1px solid var(--border); display:flex; justify-content:space-between; align-items:center; color:var(--muted); font-size:13px}
-    .error{color:#fff; background:#b00020; border-color:#8d001a}
+
+    pre, textarea.output{width:100%; background:#0b1020; color:#eaf2ff; border-radius:12px; border:1px solid #0d1530; padding:16px; font-family: ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; font-size:13px; line-height:1.6; overflow:auto}
+    textarea.output{min-height:260px; resize:vertical}
+
+    .footer{padding:16px 28px; border-top:1px solid var(--border); display:flex; justify-content:space-between; align-items:center; color:var(--muted); font-size:13px}
   </style>
 </head>
 <body>
@@ -44,86 +45,74 @@
         <div class="brand">
           <img src="https://raw.githubusercontent.com/hoss-app/digital/main/carevicinityau_logo.jpg" alt="CareVicinity AU logo" />
           <div>
-            <h1 id="form-title">AI API Test Console</h1>
-            <p>Try different endpoints and models quickly. Nothing is stored unless you opt in below.</p>
+            <h1 id="form-title">AI API Test Console (Wide)</h1>
+            <p>Try endpoints and models quickly. Nothing is stored unless you opt in.</p>
           </div>
         </div>
       </div>
 
-      <form id="console" class="grid" style="padding:24px" autocomplete="off">
-        <!-- API Config -->
-        <fieldset class="grid col-12" style="border:0; padding:0; margin:0 0 8px">
-          <div class="grid top-grid">
-            <div class="field col-3">
-              <label for="method">Method</label>
-              <select id="method" class="control">
-                <option>POST</option>
-                <option>GET</option>
-              </select>
-              <label class="savecheck"><input type="checkbox" id="save"/> Save settings</label>
-            </div>
-            <div class="field col-9">
-              <label for="url">API URL</label>
-              <input class="control" id="url" name="url" type="url" placeholder="https://api.example.com/v1/chat/completions" required />
-              <div class="small">Your Databricks/endpoint URL. Must allow browser requests (CORS).</div>
-            </div>
-            <div class="field col-6">
-              <label for="apiKey">API key (Bearer)</label>
-              <input class="control" id="apiKey" name="apiKey" type="password" placeholder="sk-..." />
-            </div>
-            <div class="field col-6">
-              <label for="model">Model</label>
-              <input class="control" id="model" name="model" list="modelOptions" placeholder="gemma3:4b" />
-              <datalist id="modelOptions">
-                <option value="gpt-4o-mini" />
-                <option value="gpt-4.1-mini" />
-                <option value="gemma3:4b" />
-                <option value="llama-3.1-8b-instruct" />
-                <option value="mistral-small" />
-              </datalist>
-            </div>
+      <div class="shell">
+        <form id="console" class="grid" autocomplete="off">
+          <!-- Top row: Method + URL + Save -->
+          <div class="field col-2">
+            <label for="method">Method</label>
+            <select id="method" class="control"><option>POST</option><option>GET</option></select>
+            <label class="small" style="display:flex; gap:8px; align-items:center; margin-top:10px"><input type="checkbox" id="save"> Save settings</label>
           </div>
-        </fieldset>
+          <div class="field col-8">
+            <label for="url">API URL</label>
+            <input class="control" id="url" name="url" type="url" placeholder="https://api.example.com/v1/chat/completions" required />
+            <div class="small">Your Databricks/endpoint URL. Must allow browser requests (CORS).</div>
+          </div>
+          <div class="field col-2">
+            <label for="model">Model</label>
+            <input class="control" id="model" name="model" list="modelOptions" placeholder="gemma3:4b" />
+            <datalist id="modelOptions">
+              <option value="gpt-4o-mini" />
+              <option value="gpt-4.1-mini" />
+              <option value="gemma3:4b" />
+              <option value="llama-3.1-8b-instruct" />
+              <option value="mistral-small" />
+            </datalist>
+          </div>
 
+          <!-- API key full width under for readability -->
+          <div class="field col-12">
+            <label for="apiKey">API key (Bearer)</label>
+            <input class="control" id="apiKey" name="apiKey" type="password" placeholder="sk-..." />
+          </div>
 
-        <!-- Prompt Area -->
-        <div class="grid col-12">
+          <!-- Prompts -->
           <div class="field col-12">
             <label for="system">System Prompt</label>
             <textarea id="system" class="control" rows="3" placeholder="You are a helpful assistant."></textarea>
           </div>
           <div class="field col-12">
             <label for="prompt">User Prompt</label>
-            <textarea id="prompt" class="control" rows="4" placeholder="Say hi from Brisbane and be happy and excited.">Say hi from Brisbane and be happy and excited.</textarea>
+            <textarea id="prompt" class="control" rows="4">Say hi from Brisbane and be happy and excited.</textarea>
           </div>
-        </div>
 
-        <!-- Payload preview -->
-        <div class="grid col-12">
-          <div class="field col-12">
+          <!-- Payload preview + Output side-by-side on wide screens -->
+          <div class="field col-6">
             <label>Request payload (preview)</label>
             <pre id="payloadPreview" aria-live="polite"></pre>
           </div>
-        </div>
-
-        <!-- Actions -->
-        <div class="actions col-12">
-          <button type="button" class="btn secondary" id="buildBtn">Build JSON</button>
-          <div class="right">
-            <button type="button" class="btn secondary" id="clearBtn">Clear Output</button>
-            <button type="submit" class="btn" id="sendBtn">Send Request</button>
-          </div>
-        </div>
-
-        <!-- Output -->
-        <div class="grid col-12" style="margin-top:8px">
-          <div class="field col-12">
+          <div class="field col-6">
             <label for="output">Model Response</label>
             <textarea id="output" class="output" readonly placeholder="Response will appear here..."></textarea>
             <div class="small">Shows the assistant message if response matches OpenAI-style format; otherwise prints raw JSON / error.</div>
           </div>
-        </div>
-      </form>
+
+          <!-- Actions -->
+          <div class="row-actions col-12">
+            <button type="button" class="btn secondary" id="buildBtn">Build JSON</button>
+            <div class="right">
+              <button type="button" class="btn secondary" id="clearBtn">Clear Output</button>
+              <button type="submit" class="btn" id="sendBtn">Send Request</button>
+            </div>
+          </div>
+        </form>
+      </div>
 
       <div class="footer">
         <span>© <span id="year"></span> CareVicinity AU</span>
@@ -134,78 +123,37 @@
 
   <script>
     const el = (id)=>document.getElementById(id);
-    const year = new Date().getFullYear();
-    document.getElementById('year').textContent = year;
+    document.getElementById('year').textContent = new Date().getFullYear();
 
-    const method = el('method');
-    const url = el('url');
-    const apiKey = el('apiKey');
-    const model = el('model');
-    const system = el('system');
-    const prompt = el('prompt');
-    const payloadPreview = el('payloadPreview');
-    const output = el('output');
-    const save = el('save');
+    const method = el('method'), url = el('url'), apiKey = el('apiKey'), model = el('model'), system = el('system'), prompt = el('prompt');
+    const payloadPreview = el('payloadPreview'), output = el('output'), save = el('save');
 
-    // Local storage helpers
-    const LS_KEY = 'cv_api_console_settings_v1';
-    function saveSettings(){
-      if(!save.checked) return localStorage.removeItem(LS_KEY);
-      const data = { method: method.value, url: url.value, apiKey: apiKey.value, model: model.value, system: system.value };
-      localStorage.setItem(LS_KEY, JSON.stringify(data));
-    }
-    function loadSettings(){
-      const raw = localStorage.getItem(LS_KEY); if(!raw) return;
-      try{ const data = JSON.parse(raw); method.value=data.method||'POST'; url.value=data.url||''; apiKey.value=data.apiKey||''; model.value=data.model||''; system.value=data.system||''; save.checked=true; }catch{ /* ignore */ }
-    }
+    const LS_KEY = 'cv_api_console_settings_v2';
+    function saveSettings(){ if(!save.checked) return localStorage.removeItem(LS_KEY); const data={ method:method.value,url:url.value,apiKey:apiKey.value,model:model.value,system:system.value }; localStorage.setItem(LS_KEY, JSON.stringify(data)); }
+    function loadSettings(){ const raw=localStorage.getItem(LS_KEY); if(!raw) return; try{const d=JSON.parse(raw); method.value=d.method||'POST'; url.value=d.url||''; apiKey.value=d.apiKey||''; model.value=d.model||''; system.value=d.system||''; save.checked=true;}catch{} }
     loadSettings();
 
-    function buildPayload(){
-      const payload = {
-        model: model.value || 'gemma3:4b',
-        messages: [
-          { role: 'system', content: (system.value || 'You are a helpful assistant.') },
-          { role: 'user', content: prompt.value || '' }
-        ]
-      };
-      payloadPreview.textContent = JSON.stringify(payload, null, 2);
-      return payload;
-    }
+    function buildPayload(){ const payload={ model: model.value || 'gemma3:4b', messages:[ {role:'system', content: system.value || 'You are a helpful assistant.'}, {role:'user', content: prompt.value || ''} ] }; payloadPreview.textContent = JSON.stringify(payload, null, 2); return payload; }
 
-    el('buildBtn').addEventListener('click', buildPayload);
-
-    el('clearBtn').addEventListener('click', ()=>{ output.value=''; });
-
+    document.getElementById('buildBtn').addEventListener('click', buildPayload);
+    document.getElementById('clearBtn').addEventListener('click', ()=> output.value='');
     document.getElementById('console').addEventListener('submit', async (e)=>{
-      e.preventDefault(); output.value = 'Sending…';
+      e.preventDefault(); output.value='Sending…';
       try{
         const body = buildPayload();
         const headers = { 'Content-Type':'application/json' };
         if(apiKey.value) headers['Authorization'] = `Bearer ${apiKey.value}`;
-
-        const res = await fetch(url.value, { method: method.value||'POST', headers, body: method.value==='GET'? undefined : JSON.stringify(body) });
-        const text = await res.text();
-        let json;
-        try { json = JSON.parse(text); } catch { json = null; }
-
-        // Try to pull assistant message in OpenAI-like schema
-        let assistant = '';
-        if(json && json.choices && json.choices[0] && json.choices[0].message){
-          assistant = json.choices[0].message.content;
-        } else if(json && json.output && typeof json.output === 'string') {
-          assistant = json.output;
-        }
+        const res = await fetch(url.value, { method: method.value||'POST', headers, body: method.value==='GET' ? undefined : JSON.stringify(body) });
+        const text = await res.text(); let json; try{ json = JSON.parse(text); } catch{ json = null; }
+        let assistant='';
+        if(json && json.choices && json.choices[0] && json.choices[0].message){ assistant = json.choices[0].message.content; }
+        else if(json && json.output && typeof json.output==='string'){ assistant = json.output; }
         output.value = assistant ? assistant : (json ? JSON.stringify(json, null, 2) : text);
-      }catch(err){
-        output.value = `Request error: ${err?.message||err}`;
-      }
+      }catch(err){ output.value = `Request error: ${err?.message||err}`; }
       saveSettings();
     });
 
-    // Keep preview fresh
-    ['input','change'].forEach(evt=>{
-      [model, system, prompt].forEach(n=> n.addEventListener(evt, buildPayload));
-    });
+    ['input','change'].forEach(evt=>[model,system,prompt].forEach(n=>n.addEventListener(evt,buildPayload)));
     buildPayload();
   </script>
 </body>
