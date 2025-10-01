@@ -9,7 +9,7 @@
       --brand:#0077be;          /* Blue */
       --brand-ink:#004c7a;      /* Darker blue */
       --accent:#0091ea;         /* Accent for focus/CTA */
-      --bg:#f5f9fc;             /* Subtle page background */
+      --bg:transparent;         /* Transparent background to blend with website */
       --card:#ffffff;           /* Card surface */
       --ink:#1f2937;            /* Primary text */
       --muted:#6b7280;          /* Secondary text */
@@ -21,9 +21,9 @@
     html,body{height:100%}
     body{margin:0; font-family: system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Noto Sans"; background:var(--bg); color:var(--ink)}
 
-    .wrap{min-height:100%; display:grid; place-items:center; padding:24px}
+    .wrap{min-height:100%; display:flex; justify-content:center; align-items:flex-start; padding:40px 20px}
 
-    .card{width:100%; max-width:900px; background:var(--card); border:1px solid var(--border); border-radius:20px; box-shadow:0 20px 40px rgba(0,0,0,.06); overflow:hidden}
+    .card{width:100%; max-width:760px; background:var(--card); border:1px solid var(--border); border-radius:20px; box-shadow:0 20px 40px rgba(0,0,0,.06); overflow:hidden}
 
     .header{padding:24px 24px 20px; background:linear-gradient(180deg, #e3f2fd, #ffffff); border-bottom:1px solid var(--border)}
     .brand h1{font-size:28px; line-height:1.2; margin:0 0 6px; color:var(--brand-ink); font-weight:700}
