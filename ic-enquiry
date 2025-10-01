@@ -1,0 +1,454 @@
+<!doctype html>
+<html lang="en-AU">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Enquiry Form · In Choice</title>
+  <style>
+    :root{
+      --brand:#0077be;          /* Blue */
+      --brand-ink:#004c7a;      /* Darker blue */
+      --accent:#0091ea;         /* Accent for focus/CTA */
+      --bg:#f5f9fc;             /* Subtle page background */
+      --card:#ffffff;           /* Card surface */
+      --ink:#1f2937;            /* Primary text */
+      --muted:#6b7280;          /* Secondary text */
+      --border:#e5e7eb;         /* Light border */
+      --error:#b00020;          /* Error colour */
+    }
+
+    *,*::before,*::after{box-sizing:border-box}
+    html,body{height:100%}
+    body{margin:0; font-family: system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Noto Sans"; background:var(--bg); color:var(--ink)}
+
+    .wrap{min-height:100%; display:grid; place-items:center; padding:24px}
+
+    .card{width:100%; max-width:900px; background:var(--card); border:1px solid var(--border); border-radius:20px; box-shadow:0 20px 40px rgba(0,0,0,.06); overflow:hidden}
+
+    .header{padding:24px 24px 20px; background:linear-gradient(180deg, #e3f2fd, #ffffff); border-bottom:1px solid var(--border)}
+    .brand h1{font-size:28px; line-height:1.2; margin:0 0 6px; color:var(--brand-ink); font-weight:700}
+    .brand p{margin:0; font-size:14px; color:var(--muted); line-height:1.5}
+
+    /* Stepper */
+    .stepper{display:grid; grid-template-columns:repeat(4,1fr); gap:0; align-items:center; padding:16px 24px; border-bottom:1px solid var(--border); background:#fff}
+    .step{display:flex; align-items:center; gap:10px; position:relative; padding:10px 6px}
+    .step:not(:last-child)::after{content:""; position:absolute; right:-1px; top:50%; transform:translateY(-50%); width:1px; height:24px; background:var(--border)}
+    .dot{width:32px; height:32px; border-radius:16px; display:grid; place-items:center; font-weight:700; font-size:14px; border:2px solid var(--border); color:var(--muted); background:#fff; flex-shrink:0}
+    .label{font-weight:600; font-size:13px; color:var(--muted); line-height:1.3}
+    .active .dot{border-color:var(--accent); color:#fff; background:var(--accent)}
+    .active .label{color:var(--ink)}
+    .done .dot{border-color:var(--accent); color:var(--accent); background:#e1f5fe}
+    .done .label{color:var(--ink)}
+
+    @media (max-width:640px){
+      .stepper{grid-template-columns:1fr 1fr; gap:8px 0}
+      .step{padding:8px 4px}
+      .label{font-size:11px}
+      .dot{width:28px; height:28px; font-size:13px}
+    }
+
+    form{padding:28px 24px 24px}
+    .grid{display:grid; gap:18px}
+    @media (min-width:720px){
+      .grid{grid-template-columns:repeat(12,1fr)}
+      .col-6{grid-column:span 6}
+      .col-4{grid-column:span 4}
+      .col-8{grid-column:span 8}
+      .col-12{grid-column:span 12}
+    }
+
+    label{display:block; font-weight:600; font-size:14px; margin:0 0 8px; color:var(--ink)}
+    .hint{font-size:12px; color:var(--muted); margin-top:6px; line-height:1.4}
+
+    .field{position:relative}
+    .control{width:100%; padding:12px 14px; border:1px solid var(--border); border-radius:12px; background:#fff; font-size:15px; line-height:1.4; color:var(--ink); transition:border-color .15s ease, box-shadow .15s ease; font-family:inherit}
+    .control::placeholder{color:#9aa3af}
+    .control:focus{outline:none; border-color:var(--accent); box-shadow:0 0 0 4px rgba(0,145,234,.15)}
+    .invalid{border-color:var(--error)!important; box-shadow:0 0 0 4px rgba(176,0,32,.1)!important}
+    select.control{cursor:pointer}
+    textarea.control{resize:vertical; min-height:100px}
+
+    .checkbox-field{display:flex; align-items:flex-start; gap:10px; padding:12px 0}
+    .checkbox-field input[type="checkbox"]{width:20px; height:20px; margin-top:2px; cursor:pointer; accent-color:var(--accent); flex-shrink:0}
+    .checkbox-field label{margin:0; font-weight:500; cursor:pointer}
+
+    .section-title{font-size:16px; font-weight:700; color:var(--brand-ink); margin:0 0 16px; padding-bottom:8px; border-bottom:2px solid var(--border)}
+
+    .actions{display:flex; gap:12px; justify-content:space-between; margin-top:20px; padding-top:20px; border-top:1px solid var(--border)}
+    .actions .right{display:flex; gap:12px; flex-wrap:wrap}
+    .btn{appearance:none; border:1px solid transparent; background:var(--accent); color:#fff; padding:13px 24px; border-radius:12px; font-weight:700; cursor:pointer; font-size:15px; transition:background .2s ease, transform .1s ease}
+    .btn:hover{background:#0081d5}
+    .btn:active{transform:scale(.98)}
+    .btn.secondary{background:#fff; color:var(--ink); border-color:var(--border)}
+    .btn.secondary:hover{background:#f9fafb}
+    .btn:focus-visible{outline:3px solid rgba(0,145,234,.35); outline-offset:2px}
+    .btn:disabled{opacity:.5; cursor:not-allowed}
+
+    .req{color:var(--accent)}
+    .sr-only{position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0}
+
+    /* Step containers + transitions */
+    .steps-wrap{position:relative; overflow:hidden; min-height:480px}
+    .step-pane{position:absolute; inset:0; padding-top:6px; opacity:0; transform:translateX(24px); pointer-events:none; transition:opacity .3s ease, transform .3s ease}
+    .step-pane.active{opacity:1; transform:translateX(0); pointer-events:auto}
+    .step-pane.exit-left{transform:translateX(-24px); opacity:0}
+
+    .footer{padding:16px 24px; border-top:1px solid var(--border); display:flex; justify-content:space-between; align-items:center; color:var(--muted); font-size:13px}
+
+    .participant-section{background:#f9fafb; border:1px solid var(--border); border-radius:12px; padding:20px; margin-bottom:16px}
+
+    /* Thank you message */
+    .thank-you{display:none; text-align:center; padding:60px 24px}
+    .thank-you.show{display:block}
+    .thank-you-icon{width:80px; height:80px; margin:0 auto 24px; background:linear-gradient(135deg, var(--accent), var(--brand)); border-radius:50%; display:grid; place-items:center}
+    .thank-you-icon svg{width:48px; height:48px; color:#fff}
+    .thank-you h2{font-size:32px; color:var(--brand-ink); margin:0 0 12px; font-weight:700}
+    .thank-you p{font-size:16px; color:var(--muted); line-height:1.6; max-width:500px; margin:0 auto 32px}
+    .thank-you .info-box{background:#f9fafb; border:1px solid var(--border); border-radius:12px; padding:20px; max-width:500px; margin:0 auto 24px; text-align:left}
+    .thank-you .info-box h3{font-size:14px; font-weight:700; color:var(--brand-ink); margin:0 0 12px}
+    .thank-you .info-box p{margin:6px 0; font-size:14px; color:var(--ink)}
+    .thank-you .info-box strong{color:var(--brand-ink)}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="card" role="region" aria-labelledby="form-title">
+      <div class="header">
+        <div class="brand">
+          <h1 id="form-title">In Choice</h1>
+          <p>NDIS Provider Enquiry Form · Fields marked <span class="req" aria-label="required">*</span> are required.</p>
+        </div>
+      </div>
+
+      <!-- Stepper indicator -->
+      <div class="stepper" aria-label="Form steps">
+        <div class="step active" data-step="1"><span class="dot">1</span><span class="label">Your Details</span></div>
+        <div class="step" data-step="2"><span class="dot">2</span><span class="label">Participant Info</span></div>
+        <div class="step" data-step="3"><span class="dot">3</span><span class="label">Organisation</span></div>
+        <div class="step" data-step="4"><span class="dot">4</span><span class="label">Enquiry</span></div>
+      </div>
+
+      <form id="stepForm" novalidate method="post" accept-charset="utf-8">
+        <div class="steps-wrap">
+          <!-- STEP 1: YOUR DETAILS -->
+          <section class="step-pane active" id="step-1" role="group" aria-labelledby="step1-title">
+            <h2 class="sr-only" id="step1-title">Your Details</h2>
+            <div class="grid">
+              <div class="field col-6">
+                <label for="firstName">First name <span class="req" aria-hidden="true">*</span></label>
+                <input class="control" id="firstName" name="firstName" type="text" autocomplete="given-name" placeholder="Your first name" required />
+              </div>
+              <div class="field col-6">
+                <label for="lastName">Last name <span class="req" aria-hidden="true">*</span></label>
+                <input class="control" id="lastName" name="lastName" type="text" autocomplete="family-name" placeholder="Your last name" required />
+              </div>
+
+              <div class="field col-6">
+                <label for="phone">Phone number <span class="req" aria-hidden="true">*</span></label>
+                <input class="control" id="phone" name="phone" type="tel" inputmode="tel" placeholder="Your phone number" required />
+              </div>
+              <div class="field col-6">
+                <label for="email">Email address <span class="req" aria-hidden="true">*</span></label>
+                <input class="control" id="email" name="email" type="email" autocomplete="email" placeholder="Your email address" required />
+              </div>
+
+              <div class="field col-12">
+                <label for="role">I am a... <span class="req" aria-hidden="true">*</span></label>
+                <select class="control" id="role" name="role" required>
+                  <option value="" selected disabled>Select your role</option>
+                  <option>Participant</option>
+                  <option>Family member</option>
+                  <option>Carer</option>
+                  <option>Support coordinator</option>
+                  <option>Plan manager</option>
+                  <option>Other</option>
+                </select>
+              </div>
+
+              <div class="field col-6">
+                <label for="dob">Date of birth</label>
+                <input class="control" id="dob" name="dob" type="date" />
+              </div>
+              <div class="field col-6">
+                <label for="yourNdis">NDIS number</label>
+                <input class="control" id="yourNdis" name="yourNdis" type="text" placeholder="Your NDIS number" />
+              </div>
+            </div>
+          </section>
+
+          <!-- STEP 2: PARTICIPANT INFO -->
+          <section class="step-pane" id="step-2" role="group" aria-labelledby="step2-title">
+            <h2 class="sr-only" id="step2-title">Participant Information</h2>
+            <p class="hint" style="margin-bottom:20px">If you're enquiring on behalf of someone else, please provide their details below. Otherwise, you can skip this step.</p>
+            
+            <div class="participant-section">
+              <h3 class="section-title">Participant Details</h3>
+              <div class="grid">
+                <div class="field col-6">
+                  <label for="partFirstName">First name</label>
+                  <input class="control" id="partFirstName" name="partFirstName" type="text" placeholder="Participant first name" />
+                </div>
+                <div class="field col-6">
+                  <label for="partLastName">Last name</label>
+                  <input class="control" id="partLastName" name="partLastName" type="text" placeholder="Participant last name" />
+                </div>
+
+                <div class="field col-6">
+                  <label for="partDob">Date of birth</label>
+                  <input class="control" id="partDob" name="partDob" type="date" />
+                </div>
+                <div class="field col-6">
+                  <label for="partNdis">NDIS number</label>
+                  <input class="control" id="partNdis" name="partNdis" type="text" placeholder="Participant NDIS number" />
+                </div>
+
+                <div class="field col-6">
+                  <label for="partEmail">Email address</label>
+                  <input class="control" id="partEmail" name="partEmail" type="email" placeholder="Participant email address" />
+                </div>
+                <div class="field col-6">
+                  <label for="partPhone">Phone number</label>
+                  <input class="control" id="partPhone" name="partPhone" type="tel" placeholder="Participant phone number" />
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- STEP 3: ORGANISATION -->
+          <section class="step-pane" id="step-3" role="group" aria-labelledby="step3-title">
+            <h2 class="sr-only" id="step3-title">Organisation Details</h2>
+            <p class="hint" style="margin-bottom:20px">If you're enquiring on behalf of an organisation, please provide the details below.</p>
+            
+            <div class="grid">
+              <div class="field col-12">
+                <label for="organisation">Organisation name</label>
+                <input class="control" id="organisation" name="organisation" type="text" placeholder="Your organisation name" />
+              </div>
+
+              <div class="field col-6">
+                <label for="businessName">Business name</label>
+                <input class="control" id="businessName" name="businessName" type="text" placeholder="Participant first name" />
+              </div>
+              <div class="field col-6">
+                <label for="abn">ABN</label>
+                <input class="control" id="abn" name="abn" type="text" placeholder="Your ABN number" />
+              </div>
+
+              <div class="field col-6">
+                <label for="invoiceNumber">Invoice number</label>
+                <input class="control" id="invoiceNumber" name="invoiceNumber" type="text" placeholder="Your invoice number" />
+              </div>
+              <div class="field col-6">
+                <label for="partName">Participant name</label>
+                <input class="control" id="partName" name="partName" type="text" placeholder="Participant name" />
+              </div>
+
+              <div class="field col-12">
+                <label for="tba">TBA</label>
+                <input class="control" id="tba" name="tba" type="text" placeholder="TBA" />
+                <p class="hint">Additional field as per your requirements</p>
+              </div>
+            </div>
+          </section>
+
+          <!-- STEP 4: ENQUIRY -->
+          <section class="step-pane" id="step-4" role="group" aria-labelledby="step4-title">
+            <h2 class="sr-only" id="step4-title">Your Enquiry</h2>
+            <div class="grid">
+              <div class="field col-12">
+                <label for="enquiryType">Enquiry type <span class="req" aria-hidden="true">*</span></label>
+                <select class="control" id="enquiryType" name="enquiryType" required>
+                  <option value="" selected disabled>Select your service...</option>
+                  <option>Support coordination</option>
+                  <option>Plan management</option>
+                  <option>Daily living assistance</option>
+                  <option>Community participation</option>
+                  <option>Accommodation services</option>
+                  <option>Transport</option>
+                  <option>Therapy services</option>
+                  <option>Other</option>
+                </select>
+              </div>
+
+              <div class="field col-12">
+                <label for="message">Message</label>
+                <textarea class="control" id="message" name="message" rows="5" placeholder="Leave us your message"></textarea>
+                <p class="hint">Tell us about your needs, goals, or any questions you have</p>
+              </div>
+
+              <div class="field col-12">
+                <label for="hearAbout">How did you hear about us?</label>
+                <select class="control" id="hearAbout" name="hearAbout">
+                  <option value="" selected>Please select...</option>
+                  <option>Google search</option>
+                  <option>Social media</option>
+                  <option>NDIS website</option>
+                  <option>Friend or family</option>
+                  <option>Support coordinator</option>
+                  <option>Healthcare professional</option>
+                  <option>Other</option>
+                </select>
+              </div>
+
+              <div class="field col-12">
+                <div class="checkbox-field">
+                  <input id="consent" name="consent" type="checkbox" required />
+                  <label for="consent">I consent to In Choice collecting and using my information to respond to this enquiry. <span class="req" aria-hidden="true">*</span></label>
+                </div>
+              </div>
+            </div>
+          </section>
+        </div>
+
+        <!-- THANK YOU MESSAGE -->
+        <div class="thank-you" id="thankYou">
+          <div class="thank-you-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+            </svg>
+          </div>
+          <h2>Thank You!</h2>
+          <p>We've received your enquiry and really appreciate you taking the time to reach out to us.</p>
+          <div class="info-box">
+            <h3>What happens next?</h3>
+            <p><strong>Within 24 hours:</strong> A member of our team will review your enquiry</p>
+            <p><strong>Within 2 business days:</strong> We'll contact you via your preferred method to discuss your needs</p>
+            <p><strong>Need urgent assistance?</strong> Call us on <strong>1300 XXX XXX</strong></p>
+          </div>
+          <p style="font-size:14px; color:var(--muted)">A confirmation email has been sent to <strong id="confirmEmail"></strong></p>
+        </div>
+
+        <div class="actions" id="formActions">
+          <button type="button" class="btn secondary" id="backBtn" aria-label="Go to previous step" disabled>Back</button>
+          <div class="right">
+            <button type="reset" class="btn secondary" aria-label="Clear the form">Clear</button>
+            <button type="button" class="btn" id="nextBtn" aria-label="Go to next step">Next</button>
+            <button type="submit" class="btn" id="submitBtn" hidden>Submit Enquiry</button>
+          </div>
+        </div>
+
+        <!-- Honeypot anti-spam field (should stay empty) -->
+        <input type="text" name="website" tabindex="-1" autocomplete="off" class="sr-only" aria-hidden="true" />
+        <!-- Static metadata to help routing -->
+        <input type="hidden" name="form_source" value="inchoice-ndis-enquiry" />
+      </form>
+
+      <div class="footer">
+        <span>© <span id="year"></span> In Choice</span>
+        <span class="sr-only" id="validationSummary" role="status" aria-live="polite"></span>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Year
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // Stepper logic
+    const form = document.getElementById('stepForm');
+    const panes = [
+      document.getElementById('step-1'),
+      document.getElementById('step-2'),
+      document.getElementById('step-3'),
+      document.getElementById('step-4')
+    ];
+    const backBtn = document.getElementById('backBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const submitBtn = document.getElementById('submitBtn');
+    const steps = [...document.querySelectorAll('.stepper .step')];
+
+    let current = 0; // index
+
+    function showStep(idx){
+      panes.forEach((p,i)=>{
+        p.classList.remove('active','exit-left');
+        if(i===idx){
+          p.classList.add('active');
+        } else if (i<idx){
+          p.classList.add('exit-left');
+        }
+      });
+
+      steps.forEach((s,i)=>{
+        s.classList.toggle('active', i===idx);
+        s.classList.toggle('done', i<idx);
+      });
+
+      backBtn.disabled = idx===0;
+      nextBtn.hidden = idx===panes.length-1;
+      submitBtn.hidden = !(idx===panes.length-1);
+    }
+
+    function validateStep(idx){
+      // Collect required inputs in the pane and validate
+      const invalids = [...panes[idx].querySelectorAll(':invalid')];
+      panes[idx].querySelectorAll('.invalid').forEach(el=>el.classList.remove('invalid'));
+      if(invalids.length){
+        invalids.forEach(el=>el.classList.add('invalid'));
+        invalids[0].focus({preventScroll:false});
+        document.getElementById('validationSummary').textContent = `${invalids.length} field${invalids.length>1?'s':''} need attention before continuing.`;
+        return false;
+      }
+      document.getElementById('validationSummary').textContent = '';
+      return true;
+    }
+
+    nextBtn.addEventListener('click', ()=>{
+      if(!validateStep(current)) return;
+      current = Math.min(current+1, panes.length-1);
+      showStep(current);
+      window.scrollTo({top:0, behavior:'smooth'});
+    });
+
+    backBtn.addEventListener('click', ()=>{
+      current = Math.max(current-1, 0);
+      showStep(current);
+      window.scrollTo({top:0, behavior:'smooth'});
+    });
+
+    // Live invalid styling
+    form.addEventListener('blur', (e) => {
+      if (!(e.target instanceof HTMLElement)) return;
+      if (e.target.matches('.control') || e.target.type === 'checkbox') {
+        e.target.classList.toggle('invalid', !e.target.checkValidity());
+      }
+    }, true);
+
+    // On submit, also validate the last step
+    form.addEventListener('submit', (e) => {
+      e.preventDefault(); // Prevent actual form submission for demo
+      
+      if(!validateStep(current)){
+        return;
+      }
+
+      // Show thank you message
+      const stepsWrap = document.querySelector('.steps-wrap');
+      const formActions = document.getElementById('formActions');
+      const thankYou = document.getElementById('thankYou');
+      const stepper = document.querySelector('.stepper');
+      const emailField = document.getElementById('email');
+      const confirmEmail = document.getElementById('confirmEmail');
+
+      // Hide form steps and actions
+      stepsWrap.style.display = 'none';
+      formActions.style.display = 'none';
+      stepper.style.display = 'none';
+
+      // Show thank you message
+      thankYou.classList.add('show');
+      confirmEmail.textContent = emailField.value;
+
+      // Scroll to top smoothly
+      window.scrollTo({top:0, behavior:'smooth'});
+
+      // In production, you would submit the form data here:
+      // const formData = new FormData(form);
+      // fetch('your-endpoint', { method: 'POST', body: formData });
+    });
+
+    // init
+    showStep(current);
+  </script>
+</body>
+</html>
