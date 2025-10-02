@@ -21,9 +21,9 @@
     html,body{height:100%}
     body{margin:0; font-family: system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Noto Sans"; background:var(--bg); color:var(--ink)}
 
-    .wrap{min-height:100vh; padding:20px}
+    .wrap{min-height:100vh; padding:20px; display:flex; flex-direction:column}
 
-    .card{width:100%; height:100%; background:var(--card); border:1px solid var(--border); border-radius:20px; box-shadow:0 20px 40px rgba(0,0,0,.06); overflow:hidden}
+    .card{width:100%; flex:1; background:var(--card); border:1px solid var(--border); border-radius:20px; overflow:hidden; display:flex; flex-direction:column}
 
     .header{padding:24px 24px 20px; background:linear-gradient(180deg, #e3f2fd, #ffffff); border-bottom:1px solid var(--border)}
     .brand h1{font-size:28px; line-height:1.2; margin:0 0 6px; color:var(--brand-ink); font-weight:700}
@@ -47,7 +47,7 @@
       .dot{width:28px; height:28px; font-size:13px}
     }
 
-    form{padding:28px 24px 24px}
+    form{padding:28px 24px 24px; flex:1; display:flex; flex-direction:column}
     .grid{display:grid; gap:18px}
     @media (min-width:720px){
       .grid{grid-template-columns:repeat(12,1fr)}
